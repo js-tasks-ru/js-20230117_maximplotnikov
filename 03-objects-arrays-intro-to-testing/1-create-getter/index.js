@@ -8,7 +8,7 @@ export function createGetter(path) {
   return function getter(obj) {
     if (Object.keys(obj).length === 0)
     {
-      return undefined;
+      return;
     }
     arr.forEach(field => obj = obj[field]);
     return obj;
