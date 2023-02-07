@@ -6,8 +6,8 @@ export default class ColumnChart {
 
   constructor({
     data = [],
-    label = 'emptyLabel',
-    link = 'emptyLink',
+    label = '',
+    link = '',
     value = 0,
     formatHeading
   } = {}) {
@@ -26,7 +26,7 @@ export default class ColumnChart {
     if (this.data.length) {
       this.element.classList.remove('column-chart_loading');
     }
-    this.subElements = this.getSubElements(this.element);
+    this.subElements = this.getSubElements();
   }
 
   createInnerHtml() {
@@ -67,8 +67,12 @@ export default class ColumnChart {
     }).join('');
   }
 
-  getSubElements(element) {
-    const elements = element.querySelectorAll('[data-element]');
+  /**
+   * Обновление данных элементов без перезагрузки всего ColumnChart
+   * @returns {*} обновленные элементы с отображаемыми данными для ColumnChart
+   */
+  getSubElements() {
+    const elements = this.element.querySelectorAll('[data-element]');
     return [...elements].reduce((childElements, nextFindElement) => {
       childElements[nextFindElement.dataset.element] = nextFindElement;
       return childElements;
