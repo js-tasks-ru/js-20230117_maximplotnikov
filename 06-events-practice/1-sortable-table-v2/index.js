@@ -130,7 +130,7 @@ export default class SortableTable {
    */
   addSortableEventListener() {
     this.subElements.header.addEventListener('pointerdown', (event) => {
-      const columnHeader = event.target.closest('div');
+      const columnHeader = event.target.closest('[data-sortable=true]');
       if (!columnHeader) {return;}
       const columnHeaderId = columnHeader.dataset.id;
       const columnHeaderSortOrder = columnHeader.dataset.order;
