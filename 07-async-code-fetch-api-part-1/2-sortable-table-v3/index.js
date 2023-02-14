@@ -34,18 +34,17 @@ export default class SortableTable {
     this.subElements = this.getSubElements();
 
     this.isAllLoaded = false;
-    await this.loadData({
+    const responseJson = await this.loadData({
       "_sort": this.sorted.id,
       "_order": this.sorted.order,
       "_start": this.start,
       "_end": this.end
-    }).then(data => {
-      this.data = data;
-      this.subElements.body.innerHTML = this.getTableRows(this.data);
-      this.setSortedColumn(this.sorted.id, this.sorted.order);
-      this.addSortableEventListener();
-      this.addScrollListener();
     });
+    this.data = Object.values(responseJson);
+    this.subElements.body.innerHTML = this.getTableRows(this.data);
+    this.setSortedColumn(this.sorted.id, this.sorted.order);
+    this.addSortableEventListener();
+    this.addScrollListener();
   }
 
   /**
@@ -183,11 +182,12 @@ export default class SortableTable {
       "_start": this.start,
       "_end": this.end
     };
-    await this.loadData(sortedOptions)
-      .then(sortedData => {
-        this.setSortedColumn(field, orderBy);
-        this.subElements.body.innerHTML = this.getTableRows(sortedData);
-      });
+
+    const responseJson = await this.loadData(sortedOptions);
+    Object.values(responseJson).forEach(sortedData => {
+      this.setSortedColumn(field, orderBy);
+      this.subElements.body.innerHTML = this.getTableRows(sortedData);
+    });
   }
 
   async loadData(sortedOptions = {}) {
@@ -222,10 +222,17 @@ export default class SortableTable {
       if (!columnHeader) {
         return;
       }
-      const columnHeaderId = columnHeader.dataset.id;
-      const columnHeaderSortOrder = columnHeader.dataset.order;
-      this.sort(columnHeaderId, columnHeaderSortOrder === 'desc' ? 'asc' : 'desc');
+      const { id, order } = columnHeader.dataset;
+      this.sort(id, this.changeOrder(order));
     });
+  }
+
+  changeOrder(order) {
+    const orders = {
+      asc: 'desc',
+      desc: 'asc'
+    };
+    return orders[order];
   }
 
   addScrollListener() {

@@ -85,15 +85,13 @@ export default class ColumnChart {
     this.url.searchParams.set('from', from.toISOString());
     this.url.searchParams.set('to', to.toISOString());
 
-    return await fetchJson(this.url)
-      .then((responseJson) => {
-        this.data = Object.values(responseJson);
-        this.subElements.header.textContent = this.formatHeading(this.data.reduce((sum, nextValue) => (sum + nextValue), 0));
-        this.subElements.body.innerHTML = this.getColumns();
-        this.element.classList.remove('column-chart_loading');
+    const responseJson = await fetchJson(this.url);
+    this.data = Object.values(responseJson);
+    this.subElements.header.textContent = this.formatHeading(this.data.reduce((sum, nextValue) => (sum + nextValue), 0));
+    this.subElements.body.innerHTML = this.getColumns();
+    this.element.classList.remove('column-chart_loading');
 
-        return responseJson;
-      });
+    return responseJson;
   }
 
   /**
