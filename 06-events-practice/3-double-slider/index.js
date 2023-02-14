@@ -48,8 +48,9 @@ export default class DoubleSlider {
 
   onPointerDown = (event) => {
     //расчет координат слайдера с учетом изменения размера окна
-    this.sliderWitdth = this.subElements.slider.getBoundingClientRect().width;
-    this.sliderLeftSidePos = this.subElements.slider.getBoundingClientRect().left;
+    const { width, left } = this.subElements.slider.getBoundingClientRect();
+    this.sliderWitdth = width;
+    this.sliderLeftSidePos = left;
     if (event.target.closest('.range-slider__thumb-left') || event.target.closest('.range-slider__thumb-right')) {
       this.targetThumb = event.target;
       document.addEventListener('pointermove', this.onPointerMove);
@@ -112,13 +113,13 @@ export default class DoubleSlider {
     this.targetThumb = null;
   }
 
-  remove = () => {
+  remove() {
     if (this.element) {
       this.element.remove();
     }
   }
 
-  destroy = () => {
+  destroy() {
     this.element.removeEventListener('pointerdown', this.onPointerDown);
     this.remove();
   }
