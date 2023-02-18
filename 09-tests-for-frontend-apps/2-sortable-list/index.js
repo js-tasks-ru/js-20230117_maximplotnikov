@@ -120,11 +120,15 @@ export default class SortableList {
   }
 
   remove() {
-    this.element.remove();
+    if (this.element) {
+      this.element.remove();
+    }
   }
 
   destroy() {
     this.element.removeEventListener('pointerdown', this.onPointerDown);
     this.remove();
+    this.subElements = {};
+    this.element = null;
   }
 }

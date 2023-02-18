@@ -263,18 +263,20 @@ export default class ProductForm {
   }
 
   remove() {
-    this.element.remove();
+    if (this.element) {
+      this.element.remove();
+    }
   }
 
   destroy() {
     this.removeListeners();
     this.remove();
+    this.subElements = {};
     this.element = null;
-    this.subElements = null;
   }
 
   removeListeners() {
-    const {imageListContainer, productForm, uploadImage} = this.subElements;
+    const {productForm, uploadImage} = this.subElements;
     productForm.removeEventListener('submit', this.onSubmit);
     uploadImage.removeEventListener('click', this.onUploadImage);
   }
